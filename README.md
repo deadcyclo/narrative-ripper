@@ -79,6 +79,7 @@ redownload everything. Be safe. Grab your data as soon as possible! **
 ## Installation
 
 * The application has been tested on 2.7.6 on ubuntu, but other versions of python should work
+* The metadata downloader requires the [requests python package](https://pypi.python.org/pypi/requests/2.11.1) to be installed
 * The application itself has no requirements, but if you install the optional [colorama python package](https://pypi.python.org/pypi/colorama/0.3.7) the downloader will give you nice colors in its printout
 
 ## Usage
