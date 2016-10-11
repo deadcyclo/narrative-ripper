@@ -79,16 +79,9 @@ redownload everything. Be safe. Grab your data as soon as possible! **
 ## Installation
 
 * The application has been tested on 2.7.6 on ubuntu, but other versions of python should work
-* The oauth library from narrative requires the [requests python package](https://pypi.python.org/pypi/requests/2.11.1) to be installed
 * The application itself has no requirements, but if you install the optional [colorama python package](https://pypi.python.org/pypi/colorama/0.3.7) the downloader will give you nice colors in its printout
 
 ## Usage
-
-### Register an application
-
-* Go to <http://open.getnarrative.com/apps> and register an application
-* Use <http://localhost:4576> as the redirect URI when prompted
-* Make a note of your api client id and api client secret
 
 ### Run the metadata downloader
 
@@ -98,8 +91,8 @@ slow and unstable, and we want the photo and video downloads to go as
 fast as possible.
 
 * run the command `python ripper.py`
-* when prompted enter your api client id
-* when prompted enter your api client secret
+* when prompted enter the email you used to register with narrative
+* when prompted enter your narrative password
 * when prompted enter the full path to where you would like to download your data from Narrative to
 * sit back and wait
 
