@@ -18,8 +18,7 @@
 
 # TODO: Download tags, faces, comments, account and device info
 
-from python_oauth2_token import get_token
-import requests, time, json, string, os.path
+import requests, time, json, string, os.path, sys
 
 def mkdir_recursive(path):
     sub_path = os.path.dirname(path)
@@ -90,10 +89,21 @@ def do_token_stuff(token):
 
   get_multiple(session, "https://narrativeapp.com/api/v2/timeline/?limit=3000", "metadata/timeline", "page-{cnt}.json")
 
+def get_token(email, password):
+    params = { "grant_type": "password", "client_id": "ios", "email": email, "password": password }
+    return json.loads(requests.post("https://narrativeapp.com/oauth2/token/", params).text)
+  
 if __name__ == "__main__":
+    email = raw_input("Enter your email address: ")
+    password = raw_input("Enter your password: ")
+
+    try:
+        token = get_token(email, password)
+    except:
+        print "Incorrect email or password."
+        sys.exit(-1)
+
     global path
-    apikey = raw_input("Enter your API client id: ")
-    apisecret = raw_input("Enter your API client secret: ")
     path = raw_input("Where do you want to store stuff? ")
-    get_token(apikey, apisecret, do_token_stuff)
+    do_token_stuff(token)
 
