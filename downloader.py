@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import multiprocessing, json, os, string, urllib, sys
+import multiprocessing, json, os, string, urllib, sys, time
 
 try:
     from colorama import init, Fore, Back, Style
@@ -178,7 +178,21 @@ def download_file(file):
     else:
         cblue('[{proc}] -> {url}'.format(proc=os.getpid(), url=file['url']))
         image=urllib.URLopener()
-        image.retrieve(file['url'], filefullname)
+
+        attempts = 0
+        retrieve = True
+        while retrieve:
+            try:
+                image.retrieve(file['url'], filefullname)
+                retrieve = False
+            except:
+                attempts += 1
+                if attempts < 3:
+                    cyellow('[{proc}] -> error when retrieving {file}, trying again ({attempt})'.format(proc=os.getpid(), file=filename, attempt=attempts))
+                    time.sleep(1)
+                else:
+                    cred('[{proc}] -> could not retrieve {file}'.format(proc=os.getpid(), file=filename))
+                    retrieve = False
 
 def create_paths(path, paths):
     for p in paths:
