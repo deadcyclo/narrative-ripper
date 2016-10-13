@@ -43,11 +43,15 @@ def file_exists(subpath, name):
 
 def get_url(session, url):
     print "Retrieving {url} from web".format(url=url)
+    retries = 0
     while 'r' not in locals() or r.status_code != 200:
         r = session.get(url)
         if r.status_code != 200:
+            if retries == 10:
+                return None
             print "Failed {url}. Retrying in 1 second.".format(url=url)
             time.sleep(1)
+            retries += 1
     return r.json()
 
 def get_from_file_or_service(session, url, subpath, name):
@@ -56,19 +60,24 @@ def get_from_file_or_service(session, url, subpath, name):
         with open(os.path.join(path, subpath, name)) as data_file:    
             return json.load(data_file)
     data = get_url(session, url)
-    print_to_file(subpath, name, data)
+    if data is not None:
+        print_to_file(subpath, name, data)
     time.sleep(1)
     return data
 
 def get_multiple(session, url, subpath, name):
     data = get_from_file_or_service(session, url, subpath, name.format(cnt=1))
+    if data is None:
+        return None
     cnt = 2
     while data['next'] is not None:
         data = get_from_file_or_service(session, data['next'], subpath, name.format(cnt=cnt))
         cnt += 1
     
 def get_moments(session, url, subpath, name):
-    moments = get_from_file_or_service(session, url, subpath, name)
+    moments = None
+    while moments == None:
+        moments = get_from_file_or_service(session, url, subpath, name)
     for moment in moments['results']:
         moment_path = "metadata/moments/{uuid}".format(uuid=moment['uuid'])
         moment_data = get_from_file_or_service(session, moment['url'], moment_path, "moment.json")        
