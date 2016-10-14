@@ -126,6 +126,23 @@ application again. The downloader simply checks if a file with the
 given name exists in the correct location to determine if it should
 download or not. If no file is found, the file will be downloaded.
 
+## Data issues and crashes
+
+It seems that the Narratives dataquality isn't very good, and some
+people have data with a lot of errors in it. You might need to tweak
+the script if you experience issue. You might be able to find some
+information about this in my posts in the official
+[Narrative Facebook group](https://www.facebook.com/groups/NarrativeLounge/permalink/1138896219481247).
+
+There is also a branch of the project called
+[allow-failure](https://github.com/deadcyclo/narrative-ripper/tree/allow-failure). The
+ripper in this branch will instead of retrying metadata for moments
+and sub moment data indefinitely, only retry 10 times before
+continuing. This allows you to continue retrieving metadata, even if
+some of the metadata is corrupt. This branch will not be merged to
+master, as it is a fallback for those of you who have issues with bad
+data.
+
 ## Bug reporting
 
 Please open a ticket here on github, and I'll get back to you as soon
