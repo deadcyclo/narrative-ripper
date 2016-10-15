@@ -77,7 +77,10 @@ def get_photo_urls(path, type, storage_subpath):
                     with open(jsonf) as data_file:
                         data = json.load(data_file)
                         for image in data['results']:
-                            photos.append({'url' : image['renders'][type]['url'], 'dir' : os.path.join(path, storage_subpath.format(uuid=image['moment_uuid']))})
+                            try:
+                                photos.append({'url' : image['renders'][type]['url'], 'dir' : os.path.join(path, storage_subpath.format(uuid=image['moment_uuid']))})
+                            except:
+                                cred('[{proc}] -> skipping {type} as it does not exist'.format(proc=os.getpid(), type=type))
     return photos
 
 def get_cover_photo_urls(path, storage_subpath):
