@@ -91,10 +91,13 @@ do this separately with a separate command since the Narrative API is
 slow and unstable, and we want the photo and video downloads to go as
 fast as possible.
 
-* run the command `python ripper.py`
-* when prompted enter the email you used to register with narrative
-* when prompted enter your narrative password
-* when prompted enter the full path to where you would like to download your data from Narrative to
+* run the command `ripper.py [-h] [-m MAX_RETRY] [-e EMAIL] [-p PASSWORD] [-o OUTPUT_PATH]`
+  * none of the parameters are required; when any of the necessary parameters are not specified, you will be prompted to enter them
+  * `-h`: show help information
+  * `-m`, `--max-retry`: the max number of times that ripper reties if there is any communication issue; when unspecified, ripper will retry indefinitely
+  * `-e`, `--email`: the email you used to register with narrative
+  * `-p`, `--password`: your narrative password
+  * `-o`, `--output-path`: the full path to where you would like to download your data from Narrative to
 * sit back and wait
 
 ### Run the content downloader
@@ -134,14 +137,11 @@ the script if you experience issue. You might be able to find some
 information about this in my posts in the official
 [Narrative Facebook group](https://www.facebook.com/groups/NarrativeLounge/permalink/1138896219481247).
 
-There is also a branch of the project called
-[allow-failure](https://github.com/deadcyclo/narrative-ripper/tree/allow-failure). The
-ripper in this branch will instead of retrying metadata for moments
-and sub moment data indefinitely, only retry 10 times before
-continuing. This allows you to continue retrieving metadata, even if
-some of the metadata is corrupt. This branch will not be merged to
-master, as it is a fallback for those of you who have issues with bad
-data.
+You can specify a max retry when running the ripper (e.g. `-m 10`,
+`--max-retry 10`), which will only retry the specified times before
+continuing, instead of retrying metadata for moments and sub moment
+data indefinitely. This allows you to continue retrieving metadata,
+even if some of the metadata is corrupt.
 
 ## Bug reporting
 
