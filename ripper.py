@@ -18,7 +18,7 @@
 
 # TODO: Download tags, faces, comments, account and device info
 
-import requests, time, json, string, os.path, sys
+import requests, time, json, string, os.path, sys, argparse
 
 def mkdir_recursive(path):
     sub_path = os.path.dirname(path)
@@ -47,7 +47,7 @@ def get_url(session, url):
     while 'r' not in locals() or r.status_code != 200:
         r = session.get(url)
         if r.status_code != 200:
-            if retries == 10:
+            if max_retry > 0 and retries == max_retry:
                 return None
             print "Failed {url}. Retrying in 1 second.".format(url=url)
             time.sleep(1)
@@ -101,10 +101,30 @@ def do_token_stuff(token):
 def get_token(email, password):
     params = { "grant_type": "password", "client_id": "ios", "email": email, "password": password }
     return json.loads(requests.post("https://narrativeapp.com/oauth2/token/", params).text)
-  
+
 if __name__ == "__main__":
-    email = raw_input("Enter your email address: ")
-    password = raw_input("Enter your password: ")
+    parser = argparse.ArgumentParser(description='Narrative Ripper')
+    parser.add_argument('-m', '--max-retry', help='max retry; when it is not specified or its value is zero or negative, ripper will retry indefinitely', required=False)
+    parser.add_argument('-e', '--email', help='account email', required=False)
+    parser.add_argument('-p', '--password', help='account password', required=False)
+    parser.add_argument('-o', '--output_path', help='output path', required=False)
+    args = vars(parser.parse_args())
+
+    global max_retry
+    if args['max_retry'] is None:
+        max_retry = 0
+    else:
+        max_retry = int(args['max_retry'])        
+
+    if args['email'] is None:
+        email = raw_input("Enter your email address: ")
+    else:
+        email = args['email']
+
+    if args['password'] is None:
+        password = raw_input("Enter your password: ")
+    else:
+        password = args['password']
 
     try:
         token = get_token(email, password)
@@ -113,6 +133,9 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     global path
-    path = raw_input("Where do you want to store stuff? ")
-    do_token_stuff(token)
+    if args['output_path'] is None:
+        path = raw_input("Where do you want to store stuff? ")
+    else:
+        path = args['output_path']
 
+    do_token_stuff(token)
