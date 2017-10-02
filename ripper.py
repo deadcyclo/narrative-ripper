@@ -18,7 +18,7 @@
 
 # TODO: Download tags, faces, comments, account and device info
 
-import requests, time, json, string, os.path, sys, argparse
+import requests, time, json, string, os.path, sys, argparse, getpass
 
 def mkdir_recursive(path):
     sub_path = os.path.dirname(path)
@@ -122,7 +122,7 @@ if __name__ == "__main__":
         email = args['email']
 
     if args['password'] is None:
-        password = raw_input("Enter your password: ")
+        password = getpass.getpass(prompt='Enter your password: ')
     else:
         password = args['password']
 
