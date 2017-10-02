@@ -86,7 +86,6 @@ def get_moments(session, url, subpath, name):
     return moments
 
 def do_token_stuff(token):
-  print token['access_token']
   session = requests.Session()
   session.headers.update({'Authorization': 'Bearer {key}'.format(key=token['access_token'])})
 
@@ -128,6 +127,13 @@ if __name__ == "__main__":
 
     try:
         token = get_token(email, password)
+        if 'access_token' not in token:
+            for key, value in token.iteritems():
+                print "{k}: {v}".format(k=key, v=value)
+            sys.exit(-1)
+        else:
+            print "Authentication succeeded"
+            print "Access token: {t})".format(t=token['access_token'])
     except:
         print "Incorrect email or password."
         sys.exit(-1)
